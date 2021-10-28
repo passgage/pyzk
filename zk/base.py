@@ -363,7 +363,7 @@ class ZK(object):
         :return: bool
         """
         self.end_live_capture = False
-        if not self.ommit_ping and not self.helper.test_ping():
+        if False: #not self.ommit_ping and not self.helper.test_ping():
             raise ZKNetworkError("can't reach device (ping %s)" % self.__address[0])
         if not self.force_udp and self.helper.test_tcp() == 0:
             self.user_packet_size = 72 # default zk8
