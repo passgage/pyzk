@@ -1573,6 +1573,24 @@ class ZK(object):
         self.free_data()
         if self.verbose: print ("_read w/chunk %i bytes" % start)
         return b''.join(data), start
+    
+    
+    def get_attendance_from_bytes(self, attendance_data):
+        attendances = []
+        if len(attendance_data) < 4:
+            return attendances
+        total_size = unpack("I", attendance_data[:4])[0]
+        attendance_data = attendance_data[4:]
+        while len(attendance_data) >= 16:
+            user_id, timestamp, status, punch, reserved, workcode = unpack('<I4sBB2sI', attendance_data.ljust(16, b'\x00')[:16])
+            user_id = str(user_id)
+            if self.verbose: print(codecs.encode(attendance_data[:16], 'hex'))
+            attendance_data = attendance_data[16:]
+            uid = str(user_id)
+            timestamp = self.__decode_time(timestamp)
+            attendance = Attendance(user_id, timestamp, status, punch, uid)
+            attendances.append(attendance)
+        return attendances
 
     def get_attendance(self):
         """
