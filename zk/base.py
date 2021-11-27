@@ -690,7 +690,7 @@ class ZK(object):
         :return: bool
         """
         command = const.CMD_UNLOCK
-        command_string = pack("I",int(time)*10)
+        command_string = pack("I",int(time*10))
         cmd_response = self.__send_command(command, command_string)
         if cmd_response.get('status'):
             return True
